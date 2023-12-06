@@ -3,9 +3,6 @@ https://en.wikipedia.org/wiki/Piano_key_frequencies
 """
 
 _NOTES = (
-    'A',
-    'A#/Bb',
-    'B',
     'C',
     'C#/Db',
     'D',
@@ -15,6 +12,9 @@ _NOTES = (
     'F#/Gb',
     'G',
     'G#/Ab',
+    'A',
+    'A#/Bb',
+    'B',
 )
 _DEFAULT_OCTAVE = 4  # The octave of the note-frequency lookup table
 _A4_FREQUENCY = 440.0  # [Hz] Linked to _DEFAULT_OCTAVE
@@ -22,8 +22,9 @@ _A4_FREQUENCY = 440.0  # [Hz] Linked to _DEFAULT_OCTAVE
 # Form lookup table which accounts for sharps and flats
 _note_frequency_lookup_table = {}
 for _i, _note in enumerate(_NOTES):
+    _frequency = _A4_FREQUENCY * (2 ** ((_i - _NOTES.index('A')) / 12))
     for _note in _note.split('/'):
-        _note_frequency_lookup_table[_note] = _A4_FREQUENCY * (2 ** (1 / 12)) ** _i
+        _note_frequency_lookup_table[_note] = _frequency
 
 
 # Function to calculate the frequency of a provided note and octave (only allows notes
