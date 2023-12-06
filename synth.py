@@ -1,5 +1,6 @@
 """
-https://en.wikipedia.org/wiki/Piano_key_frequencies
+Yes, there are packages which do most of this stuff already, but I wanted to implement
+these fundamental functions from ~scratch to learn how they work...
 """
 
 import numpy as np
@@ -24,7 +25,8 @@ _NOTES = (
 _FS = 44100  # [Hz] Audio sampling rate
 _DTYPE = np.int16  # Data type corresponding to 16-bit audio
 
-# Form lookup table which accounts for sharps and flats
+# Form lookup table which accounts for sharps and flats (see
+# https://en.wikipedia.org/wiki/Scientific_pitch_notation#Table_of_note_frequencies)
 _note_frequency_lookup_table = {}
 for _i, _note in enumerate(_NOTES):
     _frequency = _A4_FREQUENCY * (2 ** ((_i - _NOTES.index('A')) / 12))
