@@ -24,6 +24,7 @@ _NOTES = (
 )
 _FS = 44100  # [Hz] Audio sampling rate
 _DTYPE = np.int16  # Data type corresponding to 16-bit audio
+_S_PER_MIN = 60  # [s/min]
 
 # Form lookup table which accounts for sharps and flats (see
 # https://en.wikipedia.org/wiki/Scientific_pitch_notation#Table_of_note_frequencies)
@@ -66,9 +67,11 @@ def saw(frequency: float, duration: float) -> np.ndarray:
 
 
 # Try it out!
-chord = ('F', 'A', 'C', 'Eb')
-duration = 2  # [s]
-signal = saw(n2f(chord[0]), duration)
-for note in chord[1:]:
+BPM = 120
+CHORD = ('F', 'A', 'C', 'Eb')
+NOTE_LENGTH = 4  # [beats] E.g., 4 beats = whole note
+duration = NOTE_LENGTH / (BPM / _S_PER_MIN)
+signal = saw(n2f(CHORD[0]), duration)
+for note in CHORD[1:]:
     signal += saw(n2f(note), duration)
 write_wav('chord.wav', signal)
