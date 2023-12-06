@@ -2,8 +2,10 @@
 https://en.wikipedia.org/wiki/Piano_key_frequencies
 """
 
+_DEFAULT_OCTAVE = 4  # The octave of the note-frequency lookup table
+_A4_FREQUENCY = 440.0  # [Hz] Linked to _DEFAULT_OCTAVE
 _NOTES = (
-    'C',
+    'C',  # C4 is "middle C"
     'C#/Db',
     'D',
     'D#/Eb',
@@ -12,12 +14,10 @@ _NOTES = (
     'F#/Gb',
     'G',
     'G#/Ab',
-    'A',
+    'A',  # A4 is "A440"
     'A#/Bb',
     'B',
 )
-_DEFAULT_OCTAVE = 4  # The octave of the note-frequency lookup table
-_A4_FREQUENCY = 440.0  # [Hz] Linked to _DEFAULT_OCTAVE
 
 # Form lookup table which accounts for sharps and flats
 _note_frequency_lookup_table = {}
