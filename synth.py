@@ -68,7 +68,7 @@ def saw(frequency: float, duration: float) -> np.ndarray:
 # Try it out!
 chord = ('F', 'A', 'C', 'Eb')
 duration = 2  # [s]
-signal = np.zeros(int(duration * _FS))
-for note in chord:
+signal = saw(n2f(chord[0]), duration)
+for note in chord[1:]:
     signal += saw(n2f(note), duration)
 write_wav('chord.wav', signal)
