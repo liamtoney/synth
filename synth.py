@@ -22,6 +22,7 @@ _NOTES = (
     'B',
 )
 _FS = 44100  # [Hz] Audio sampling rate
+_DTYPE = np.int16  # Data type corresponding to 16-bit audio
 
 # Form lookup table which accounts for sharps and flats
 _note_frequency_lookup_table = {}
@@ -46,6 +47,14 @@ def n2f(note: str, octave: int = _DEFAULT_OCTAVE) -> float:
     return _note_frequency_lookup_table[note] * (2**_octave_shift)  # [Hz]
 
 
+# Function to write a NumPy array to a WAV file as 16-bit 44.1 kHz normalized mono audio
+def write_wav(filename: str, signal: np.ndarray):
+    output = signal.copy()
+    output /= np.abs(output).max()  # Normalize to [-1, 1]
+    output *= np.iinfo(_DTYPE).max  # Scale to 16-bit range
+    wavfile.write(filename, _FS, output.astype(_DTYPE))
+
+
 # Function to create a sawtooth wave of a given frequency and duration
 def saw(frequency: float, duration: float) -> np.ndarray:
     single_tooth = np.linspace(-1, 1, int(_FS / frequency))
@@ -60,4 +69,4 @@ duration = 2  # [s]
 signal = np.zeros(int(duration * _FS))
 for note in chord:
     signal += saw(n2f(note), duration)
-wavfile.write('chord.wav', _FS, signal)
+write_wav('chord.wav', signal)
