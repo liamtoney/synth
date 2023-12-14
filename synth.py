@@ -4,6 +4,7 @@ these fundamental functions from ~scratch to learn how they work...
 """
 
 import numpy as np
+from scipy import signal
 from scipy.io import wavfile
 
 _DEFAULT_OCTAVE = 4  # The octave of the note-frequency lookup table
@@ -25,6 +26,7 @@ _NOTES = (
 _FS = 44100  # [Hz] Audio sampling rate
 _DTYPE = np.int16  # Data type corresponding to 16-bit audio
 _S_PER_MIN = 60  # [s/min]
+_N_CORNERS = 2  # Number of corners in Butterworth filter
 
 # Form lookup table which accounts for sharps and flats (see
 # https://en.wikipedia.org/wiki/Scientific_pitch_notation#Table_of_note_frequencies)
@@ -66,12 +68,22 @@ def saw(frequency: float, duration: float) -> np.ndarray:
     return np.tile(single_tooth, n_cycles_ceil)[:duration_samples]
 
 
+# Function to apply a low-pass filter to a signal
+def lowpass(s: np.ndarray, cutoff_frequency: float) -> np.ndarray:
+    sos = signal.butter(
+        _N_CORNERS, cutoff_frequency, btype='lowpass', output='sos', fs=_FS
+    )
+    return signal.sosfilt(sos, s)
+
+
 # Try it out!
 BPM = 120
 CHORD = ('F', 'A', 'C', 'Eb')
 NOTE_LENGTH = 4  # [beats] E.g., 4 beats = whole note
+CUTOFF_FREQUENCY = 1000  # [Hz]
 duration = NOTE_LENGTH / (BPM / _S_PER_MIN)
-signal = saw(n2f(CHORD[0]), duration)
+s = saw(n2f(CHORD[0]), duration)
 for note in CHORD[1:]:
-    signal += saw(n2f(note), duration)
-write_wav('chord.wav', signal)
+    s += saw(n2f(note), duration)
+s = lowpass(s, CUTOFF_FREQUENCY)
+write_wav('chord.wav', s)
