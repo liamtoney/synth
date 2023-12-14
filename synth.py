@@ -26,7 +26,7 @@ _NOTES = (
 _FS = 44100  # [Hz] Audio sampling rate
 _DTYPE = np.int16  # Data type corresponding to 16-bit audio
 _S_PER_MIN = 60  # [s/min]
-_N_CORNERS = 2  # Number of corners in Butterworth filter
+_N_CORNERS = 4  # Emulate a "Moog-style" 4-pole (24 dB/octave) filter
 
 # Form lookup table which accounts for sharps and flats (see
 # https://en.wikipedia.org/wiki/Scientific_pitch_notation#Table_of_note_frequencies)
